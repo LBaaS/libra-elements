@@ -1,0 +1,7 @@
+# HAProxy is managed by libra-worker
+
+case $(lsb_release -is) in
+    Ubuntu)
+        apt-get install -qy libra-worker
+        ;;
+esac

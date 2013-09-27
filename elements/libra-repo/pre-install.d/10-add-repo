@@ -1,0 +1,9 @@
+# Setup the repo
+
+case $(lsb_release -is) in
+    Ubuntu)
+        install-packages python-software-properties
+        add-apt-repository ppa:libra-core/libra-ppa
+        apt-get update
+        ;;
+esac
