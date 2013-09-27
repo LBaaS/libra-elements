@@ -2,7 +2,6 @@
 
 case $(lsb_release -is) in
     Ubuntu)
-        service haproxy stop
         update-rc.d haproxy disable
         ;;
 esac

@@ -3,7 +3,8 @@
 case $(lsb_release -is) in
     Ubuntu)
         install-packages python-software-properties
-        add-apt-repository ppa:libra-core/libra-ppa
+        echo "deb http://ppa.launchpad.net/libra-core/ppa/ubuntu $DIB_RELEASE main" > /etc/apt/sources.list.d/libra-ppa.list
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 190D741E
         apt-get update
         ;;
 esac
