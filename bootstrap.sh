@@ -19,7 +19,7 @@ echo 'export DIB_PATH=$HOME/diskimage-builder' >> ~/.bashrc
 echo 'export PATH=$PATH:$DIB_PATH/bin' >> ~/.bashrc
 echo 'export LIBRA_ELEMENTS=$HOME/libra-elements' >> ~/.bashrc
 
-echo 'export ELEMENTS_PATH=$DI_BUILDER_PATH/elements:$LIBRA_ELEMENTS' > ~/.bashrc
+echo 'export ELEMENTS_PATH=$DI_BUILDER_PATH/elements:$LIBRA_ELEMENTS' >> ~/.bashrc
 
 . ~/.bashrc
 
