@@ -9,12 +9,12 @@ dist=`lsb_release -is`
 install_deps() {
     case $dist in
         Ubuntu)
-            apt-get update -q
-            apt-get install -qy git qemu kpartx
+            sudo apt-get update -q
+            sudo apt-get install -qy git qemu kpartx
         ;;
         Fedora)
-            yum update -y
-            yum install -y git qemu kpartx
+            sudo yum update -y
+            sudo yum install -y git qemu kpartx
         ;;
     esac
 }
