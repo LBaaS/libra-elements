@@ -34,7 +34,6 @@ git_clone() {
 
 
 clone_repos() {
-    reload_env
     git_clone https://github.com/openstack/diskimage-builder $DIB_PATH
     git_clone https://github.com/LBaaS/libra-elements $LIBRA_ELEMENTS
 }
@@ -62,9 +61,6 @@ EOF
     }
 }
 
-reload_env() {
-    . ~/.bashrc
-}
 
 case $1 in
     deps)
@@ -78,8 +74,8 @@ case $1 in
     ;;
     *)
         install_deps
+        . ~/.dib_profile
         setup_profile
-        reload_env
         clone_repos
     ;;
 esac
