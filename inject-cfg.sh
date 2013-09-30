@@ -2,37 +2,35 @@
 
 set -x
 
-nbd=/dev/nbd0
-image=$1
-file=$2
-part=$3
+# This script is meant to be used when downloading a pre-built image or when
+# wanting to inject a libra.cfg file after building the file instead of having
+# to rebuild the image fully.
+
+# Requires: qemu-utils or alike that provides qemu-nbd.
+
+IMAGE=${IMAGE:-$1} # Image to use
+LIBRA_CFG=${LIBRA_CFG:-$2} # Config file to inject
+
+NBD=${NBD:-/dev/nbd0} # NBD device to use
+PART=${PART} # Partition on the NBD device to use, usually p1 is ok
+TARET=${TARGET} # Default to empty and a random value if not set.
 
 
-[ ! -r "$image" ] && {
-    echo "Image file not found"
+SCRIPT_DIR="$(dirname $0)"
+
+. $SCRIPT_DIR/functions
+
+[ ! -r "$LIBRA_CFG" ] && {
+    echo "Config file '$LIBRA_CFG' is missing"
     exit 0
 }
 
-[ ! -r "$file" ] && {
-    echo "File $file is missing"
-    exit 0
-}
+target=$(get_target $TARGET)
 
-[ $(egrep $nbd /proc/mounts) ] && {
-    echo "NBD $nbd is mounted already, please unmount and try again"
-    exit 0
-}
+connect_nbd $IMAGE $NBD
+mount_image ${NBD}${PART} $target
 
-tmp_dir=/tmp/worker-$(uuidgen)
+sudo cp $LIBRA_CFG $target/etc/libra.cfg
 
-sudo qemu-nbd $image -c $nbd
-
-sudo mkdir $tmp_dir
-
-sudo mount ${nbd}${part} $tmp_dir
-
-sudo cp $file $tmp_dir/etc/libra.cfg
-
-sudo umount $tmp_dir
-
-sudo qemu-nbd -d $nbd
+unmount_image $target
+disconnect_nbd $NBD

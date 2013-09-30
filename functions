@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Requires: qemu-utils or alike that provides qemu-nbd.
+
+get_target() {
+    local target=$1
+
+    if [ -z "$target" ]; then
+        target=/tmp/worker-$(uuidgen)
+    fi
+
+    echo $target
+}
+
+connect_nbd() {
+    local image=$1
+    local nbd=$2
+
+    if [ ! -r "$image" ]; then
+        echo "Image file not found"
+        exit 0
+    fi
+
+    if [ "$(egrep $nbd /proc/mounts)" ]; then
+        echo "NBD $nbd is mounted already, please unmount and try again"
+        exit 0
+    fi
+
+    sudo qemu-nbd $image -c $nbd
+}
+
+disconnect_nbd() {
+    local nbd=$1
+
+    sudo qemu-nbd -d $nbd
+}
+
+mount_image() {
+    local source=$1
+    local target=$2
+
+    if [ ! -d $target ]; then
+        sudo mkdir $target
+    fi
+
+    sudo mount $source $target
+}
+
+unmount_image() {
+    local target=$1
+
+    sudo umount $target
+}
