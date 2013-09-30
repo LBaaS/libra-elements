@@ -3,6 +3,7 @@ set -o xtrace
 
 case $(lsb_release -is) in
     Ubuntu)
-        install-packages gearman
+        GEARMAN_BIND=${GEARMAN_BIND:-0.0.0.0}
+        sed "s/127.0.0.1/$GEARMAN_BIND/g" -i /etc/default/gearman-job-instance
         ;;
 esac
